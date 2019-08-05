@@ -1,6 +1,7 @@
 import React from "react";
 import './todo-list.scss';
 import TodoListItem from '../todo-list-item';
+import ItemStatusFilter from  '../item-status-filter';
 
 
 const TodoList = ({todos, onDeleted, onToggleImportant, onToggledDone}) => {
@@ -10,12 +11,14 @@ const TodoList = ({todos, onDeleted, onToggleImportant, onToggledDone}) => {
     const {id,  ...itemProps} = item;
 
        return (
+
            <li key={item.id} className="list-group-item">
-               <TodoListItem {...  itemProps }
+               <TodoListItem {...itemProps }
                onDeleted={() => onDeleted(id)}
                onToggleImportant={() => onToggleImportant(id)}
                onToggledDone={() => onToggledDone(id)}
                />
+
            </li>
        );
     });

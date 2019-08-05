@@ -5,18 +5,41 @@ import './item-status-filter.scss'
 
 export default  class ItemStatusFilter extends Component{
 
+
+    ClickButDone = () => {
+    this.props.onClickDone();
+    };
+    ClickButAll = () => {
+        this.props.onClickAll();
+    };
+    ClickButActive = () => {
+        this.props.onClickActive();
+    };
+
+
     render() {
-       // const {} = this.props;
 
         return (
             <div className='item-status-filter d-flex'>
 
                 <span><button type = 'button'
-                              className='btn btn-info'>All</button></span>
+                              id='style'
+                              className='btn btn-outline-secondary'
+                              onClick={this.ClickButAll}
+                >All</button></span>
                 <button type = 'button'
-                              className='btn btn-outline-secondary'>Active</button>
+                              id='style'
+                              className='btn btn-outline-secondary'
+                              onClick={this.ClickButActive}
+
+                >Active</button>
                 <button type = 'button'
-                              className='btn btn-outline-secondary'>Done</button>
+                              id='style'
+                              className='btn btn-outline-secondary'
+                              onClick={this.ClickButDone}
+
+                >Done
+                </button>
 
             </div>
         );

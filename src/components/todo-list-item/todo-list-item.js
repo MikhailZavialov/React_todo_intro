@@ -1,6 +1,6 @@
 import  React from 'react';
 import './todo-list-item.scss';
-import TodoList from '../todo-list';
+
 
 const  TodoListItem = ({label, onDeleted, onToggleImportant, onToggledDone, important, done}) => {
 

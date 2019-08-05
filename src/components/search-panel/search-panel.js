@@ -6,8 +6,13 @@ import './search-panel.scss'
 
 export default class SearchPanel extends Component {
 
+
+
+
     onLabelChange = (e) => {
-    this.props.onItemSearch(e.target.value)
+
+    this.props.onItemSearch(e.target.value);
+
 };
 
     render() {
@@ -18,10 +23,10 @@ export default class SearchPanel extends Component {
                     placeholder= 'tab to search'
                     onChange={this.onLabelChange}
 
-
                 />
 
             </form>
+
 
         );
 

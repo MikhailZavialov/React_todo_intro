@@ -6,11 +6,12 @@ import SearchPanel from '../search-panel';
 import TodoList from '../todo-list';
 import ItemAddForm from '../item-add-form';
 import './app.scss'
-import TodoListItem from "../todo-list-item";
+
 
 export default class App extends Component{
 
     maxId = 100;
+
 
     state = {
         todoData: [
@@ -18,8 +19,11 @@ export default class App extends Component{
             this.createTodoItem('Do some work'),
             this.createTodoItem('Make Awesome App'),
             this.createTodoItem('Have a lunch'),
-        ]
+        ],
+        term: ''
     };
+
+    cloneTodoArr = [...this.state.todoData];
 
     createTodoItem(label) {
         return {
@@ -65,6 +69,7 @@ export default class App extends Component{
             ...arr.slice(0, idx),
             newItem,
             ...arr.slice(idx + 1)
+
         ];
     }
 
@@ -86,43 +91,108 @@ export default class App extends Component{
 
 
     searchItem = (text) => {
+
         this.setState(({todoData}) =>{
 
-            const resArr = todoData.filter(el => el.label.indexOf(text) !== -1);
+            todoData = [...this.cloneTodoArr];
 
-
-            console.log(resArr);
+            let resArr = todoData.filter(el => el.label.indexOf(text) !== -1);
 
             return{
                 todoData: resArr
-
             };
+
         })
     };
 
+    ClickDone = () => {
+        this.setState(({todoData}) =>{
+            const doneArr = todoData.filter((el) => el.done);
+            return{
+            todoData: doneArr
+            }
+        })
+    };
+
+
+    ClickAll = () => {
+        this.setState(() =>{
+            return{
+                todoData: this.cloneTodoArr
+            }
+        })
+    };
+
+
+    ClickAtive = () => {
+        this.setState(({todoData}) =>{
+            const impArr = todoData.filter((el) => el.important);
+
+            return{
+                todoData: impArr
+            }
+        })
+    };
+
+
+    search(items, term){
+
+        if(term.label === 0){
+            return items;
+        }
+
+        return  items.filter((item) => {
+            return item.label.indexOf(term) > -1;
+
+        });
+
+    }
+
+
+
+
+
     render() {
 
-        const  {todoData} = this.state;
+        const  {todoData, term} = this.state;
+
+        const visibleItems = this.search(todoData, term);
 
         const doneCount = todoData.filter((el) => el.done).length;
-
         const todoCount = todoData.length - doneCount;
+
         return (
             <div className="app">
-                <AppHeader  toDo={todoCount} done={doneCount} />
+
+                <AppHeader  toDo={todoCount} done={doneCount}/>
+
                 <div className='d-flex'>
                     <SearchPanel
-                            onItemSearch = {this.searchItem}/>
-                    <ItemStatusFilter/>
+                            onItemSearch = {this.searchItem}
+
+                    />
+
+                    <ItemStatusFilter
+
+                            onClickDone={this.ClickDone}
+                            onClickAll={this.ClickAll}
+                            onClickActive={this.ClickAtive}
+
+
+                    />
+
                 </div>
+
                 <TodoList
-                    todos={todoData}
+                    todos={visibleItems}
                     onDeleted={ this.deleteItem}
                     onToggleImportant={this.onToggleImportant}
                     onToggledDone={this.onToggledDone}
                 />
+
                 <ItemAddForm
-                    onItemAdded = {this.addItem}/>
+                    onItemAdded = {this.addItem}
+                />
             </div>
         );
     }
