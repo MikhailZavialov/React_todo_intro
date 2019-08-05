@@ -1,7 +1,7 @@
 import React from "react";
 import './todo-list.scss';
 import TodoListItem from '../todo-list-item';
-import ItemStatusFilter from  '../item-status-filter';
+
 
 
 const TodoList = ({todos, onDeleted, onToggleImportant, onToggledDone}) => {

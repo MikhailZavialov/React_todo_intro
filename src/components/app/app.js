@@ -20,8 +20,10 @@ export default class App extends Component{
             this.createTodoItem('Make Awesome App'),
             this.createTodoItem('Have a lunch'),
         ],
-        term: ''
+        term: '',
+        filter: 'all'  // active, all, done
     };
+
 
     cloneTodoArr = [...this.state.todoData];
 
@@ -90,73 +92,99 @@ export default class App extends Component{
     };
 
 
-    searchItem = (text) => {
+    // searchItem = (text) => {
+    //
+    //     this.setState(({todoData}) =>{
+    //
+    //         todoData = [...this.cloneTodoArr];
+    //
+    //         let resArr = todoData.filter(el => el.label.indexOf(text) !== -1);
+    //
+    //         return{
+    //             todoData: resArr
+    //         };
+    //
+    //     })
+    // };
 
-        this.setState(({todoData}) =>{
-
-            todoData = [...this.cloneTodoArr];
-
-            let resArr = todoData.filter(el => el.label.indexOf(text) !== -1);
-
-            return{
-                todoData: resArr
-            };
-
-        })
-    };
-
-    ClickDone = () => {
-        this.setState(({todoData}) =>{
-            const doneArr = todoData.filter((el) => el.done);
-            return{
-            todoData: doneArr
-            }
-        })
-    };
-
-
-    ClickAll = () => {
-        this.setState(() =>{
-            return{
-                todoData: this.cloneTodoArr
-            }
-        })
-    };
-
-
-    ClickAtive = () => {
-        this.setState(({todoData}) =>{
-            const impArr = todoData.filter((el) => el.important);
-
-            return{
-                todoData: impArr
-            }
-        })
-    };
+    // ClickDone = () => {
+    //     this.setState(({todoData}) =>{
+    //         const doneArr = todoData.filter((el) => el.done);
+    //         return{
+    //         todoData: doneArr
+    //         }
+    //     })
+    // };
+    //
+    //
+    // ClickAll = () => {
+    //     this.setState(() =>{
+    //         return{
+    //             todoData: this.cloneTodoArr
+    //         }
+    //     })
+    // };
+    //
+    //
+    // ClickAtive = () => {
+    //     this.setState(({todoData}) =>{
+    //         const impArr = todoData.filter((el) => el.important);
+    //
+    //         return{
+    //             todoData: impArr
+    //         }
+    //     })
+    // };
 
 
     search(items, term){
+
 
         if(term.label === 0){
             return items;
         }
 
         return  items.filter((item) => {
-            return item.label.indexOf(term) > -1;
+            return item.label.toLowerCase().indexOf(term.toLowerCase()) > -1;
 
         });
-
     }
 
 
+    onSearchChange = (term) => {
+
+        this.setState({term});
+    };
+
+
+    onFilterChange = (filter) => {
+
+        this.setState({filter});
+    };
+
+
+    filter(items, filter){
+        
+        switch (filter) {
+            case 'all':
+                return items;
+            case 'active':
+                return items.filter((el) => !el.done);
+            case 'done':
+                return items.filter((el) => el.done);
+            default:
+                return  items;
+        }
+        
+    }
 
 
 
     render() {
 
-        const  {todoData, term} = this.state;
+        const  {todoData, term, filter} = this.state;
 
-        const visibleItems = this.search(todoData, term);
+        const visibleItems = this.filter(this.search(todoData, term), filter);
 
         const doneCount = todoData.filter((el) => el.done).length;
         const todoCount = todoData.length - doneCount;
@@ -167,17 +195,15 @@ export default class App extends Component{
                 <AppHeader  toDo={todoCount} done={doneCount}/>
 
                 <div className='d-flex'>
-                    <SearchPanel
-                            onItemSearch = {this.searchItem}
 
+                    <SearchPanel
+                            onSearchChange = {this.onSearchChange }
                     />
 
                     <ItemStatusFilter
 
-                            onClickDone={this.ClickDone}
-                            onClickAll={this.ClickAll}
-                            onClickActive={this.ClickAtive}
-
+                        filter={filter}
+                        onFiltrChange={this.onFilterChange}
 
                     />
 

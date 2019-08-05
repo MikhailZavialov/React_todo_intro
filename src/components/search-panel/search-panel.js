@@ -6,12 +6,16 @@ import './search-panel.scss'
 
 export default class SearchPanel extends Component {
 
+state = {
+    term: ''
+};
 
 
+   onLabelChange = (e) => {
 
-    onLabelChange = (e) => {
-
-    this.props.onItemSearch(e.target.value);
+   const term =  e.target.value;
+   this.setState({term});
+   this.props.onSearchChange(term);
 
 };
 
@@ -22,6 +26,7 @@ export default class SearchPanel extends Component {
                     className="form-control"
                     placeholder= 'tab to search'
                     onChange={this.onLabelChange}
+                    value={this.state.term}
 
                 />
 
